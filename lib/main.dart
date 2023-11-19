@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:quizzo/home_page.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:quizzo/welcome_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => DataModel(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -13,10 +20,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _name = '';
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -35,6 +42,7 @@ class _MyAppState extends State<MyApp> {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
+        fontFamily: 'Roboto',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
@@ -44,5 +52,18 @@ class _MyAppState extends State<MyApp> {
         '/second': (context) => const MyHomePage(title: 'Second Page'),
       },
     );
+  }
+}
+
+class DataModel with ChangeNotifier {
+  String name = '';
+  String grade = '';
+
+  void updateName(newName) {
+    name = newName;
+  }
+
+  void updateGrade(newGrade) {
+    grade = newGrade;
   }
 }
