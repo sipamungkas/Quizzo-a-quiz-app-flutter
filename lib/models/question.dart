@@ -24,7 +24,18 @@ var questionList = [
       OptionItem(isKey: true, option: 'Cut Nyak Dien'),
       OptionItem(isKey: false, option: 'Pattimura'),
     ],
-  )
+  ),
+  Question(
+      image:
+          "https://4.bp.blogspot.com/-K_S0324sApU/T4aBDOX_SPI/AAAAAAAAABs/umS-FQjyxdI/s1600/pangaea.jpg",
+      question:
+          'Pada awalnya semua benua menjadi satu, apakah nama dari Benua diatas?',
+      optionList: <OptionItem>[
+        OptionItem(isKey: true, option: "Pangae"),
+        OptionItem(isKey: false, option: "Antartika"),
+        OptionItem(isKey: false, option: "Amerika"),
+        OptionItem(isKey: false, option: "Afrika"),
+      ])
 ];
 
 class OptionItem {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzo/models/question.dart';
 import 'package:quizzo/widgets/question_item.dart';
-import 'dart:developer';
 
 class QuestionOption extends StatefulWidget {
   final List<OptionItem> optionList;

@@ -17,7 +17,7 @@ class QuestionsPage extends StatefulWidget {
 
 class _QuestionsPageState extends State<QuestionsPage> {
   int index = 0;
-  List<Map> answer = List.filled(2, {});
+  List<Map> answer = List.filled(questionList.length, {});
   int selectedOption = -1;
   bool isTrue = false;
 
@@ -43,7 +43,7 @@ class _QuestionsPageState extends State<QuestionsPage> {
     var correctAnswer = answer.where((element) => element['isKey'] == true);
     final double result = correctAnswer.length / answer.length * 100;
     Provider.of<DataModel>(context, listen: false)
-        .updateResult(result.toString());
+        .updateResult(result.toStringAsFixed(2));
     Navigator.pushNamed(context, '/result');
   }
 
@@ -57,7 +57,7 @@ class _QuestionsPageState extends State<QuestionsPage> {
 
   void onPressed() {
     // updateAnswer(index, selectedOption, isTrue);
-    if (index == 1) {
+    if (index == questionList.length - 1) {
       navigatoToResult(context);
     } else {
       updateIndex(index + 1);
@@ -84,6 +84,20 @@ class _QuestionsPageState extends State<QuestionsPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
+                  if (questionList[index].image != '')
+                    Card(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.network(
+                          questionList[index].image!,
+                          // fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   Text(questionList[index].question),
                   const SizedBox(
                     height: 24,
@@ -100,7 +114,9 @@ class _QuestionsPageState extends State<QuestionsPage> {
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: selectedOption != -1 ? onPressed : null,
-                      child: Text(index == 1 ? 'Selesai' : 'Selanjutnya'),
+                      child: Text(index == questionList.length - 1
+                          ? 'Selesai'
+                          : 'Selanjutnya'),
                     ),
                   ),
                 ],
