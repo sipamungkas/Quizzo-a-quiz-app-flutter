@@ -21,7 +21,7 @@ var questionList = [
     optionList: <OptionItem>[
       OptionItem(isKey: false, option: 'R.A Kartini'),
       OptionItem(isKey: false, option: 'Ratu Kalinyamat'),
-      OptionItem(isKey: false, option: 'Cut Nyak Dien'),
+      OptionItem(isKey: true, option: 'Cut Nyak Dien'),
       OptionItem(isKey: false, option: 'Pattimura'),
     ],
   )
