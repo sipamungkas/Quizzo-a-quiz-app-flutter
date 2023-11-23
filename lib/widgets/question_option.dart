@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizzo/models/question.dart';
 import 'package:quizzo/widgets/question_item.dart';
+import 'dart:developer';
 
 class QuestionOption extends StatefulWidget {
   final List<OptionItem> optionList;
@@ -30,7 +31,7 @@ class _QuestionOptionState extends State<QuestionOption> {
               isSelected: entry.key == widget.selectedIndex,
               option: entry.value.option,
               onTap: () {
-                widget.updateSelectedOption(entry.key);
+                widget.updateSelectedOption(entry.key, entry.value.isKey);
               },
             ),
           )

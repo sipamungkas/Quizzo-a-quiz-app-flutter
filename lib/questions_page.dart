@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizzo/main.dart';
@@ -8,6 +6,7 @@ import 'package:quizzo/models/question.dart';
 import 'package:quizzo/widgets/question_option.dart';
 
 import 'widgets/drawer_mobile.dart';
+import 'dart:developer';
 
 class QuestionsPage extends StatefulWidget {
   const QuestionsPage({super.key});
@@ -20,38 +19,49 @@ class _QuestionsPageState extends State<QuestionsPage> {
   int index = 0;
   List<Map> answer = List.filled(2, {});
   int selectedOption = -1;
+  bool isTrue = false;
 
   void updateIndex(number) {
     setState(() {
       index = number;
+      isTrue = false;
     });
   }
 
-  void updateAnswer(number, optionIndex) {
+  void updateAnswer(number, optionIndex, isKey) {
     setState(() {
-      answer[index] = {'number': number, 'optionIndex': optionIndex};
-      selectedOption = -1;
+      answer[index] = {
+        'number': number,
+        'optionIndex': optionIndex,
+        'isKey': isKey
+      };
     });
+    log('answer: $answer');
   }
 
   void navigatoToResult(context) {
+    var correctAnswer = answer.where((element) => element['isKey'] == true);
+    final double result = correctAnswer.length / answer.length * 100;
     Provider.of<DataModel>(context, listen: false)
-        .updateResult(answer.length.toString());
+        .updateResult(result.toString());
     Navigator.pushNamed(context, '/result');
   }
 
-  void updateSelectedOption(optionIndex) {
+  void updateSelectedOption(optionIndex, isTrue) {
     setState(() {
       selectedOption = optionIndex;
+      isTrue = isTrue;
     });
+    updateAnswer(index, selectedOption, isTrue);
   }
 
   void onPressed() {
-    updateAnswer(1, selectedOption);
+    // updateAnswer(index, selectedOption, isTrue);
     if (index == 1) {
       navigatoToResult(context);
     } else {
       updateIndex(index + 1);
+      selectedOption = -1;
     }
   }
 
