@@ -4,16 +4,21 @@ import 'package:quizzo/widgets/question_item.dart';
 
 class QuestionOption extends StatefulWidget {
   final List<OptionItem> optionList;
+  final Function updateSelectedOption;
+  final int selectedIndex;
 
-  const QuestionOption({Key? key, required this.optionList}) : super(key: key);
+  const QuestionOption(
+      {Key? key,
+      required this.optionList,
+      required this.updateSelectedOption,
+      required this.selectedIndex})
+      : super(key: key);
 
   @override
   State<QuestionOption> createState() => _QuestionOptionState();
 }
 
 class _QuestionOptionState extends State<QuestionOption> {
-  int selectedIndex = -1;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,12 +27,10 @@ class _QuestionOptionState extends State<QuestionOption> {
           .entries
           .map(
             (entry) => Item(
-              isSelected: entry.key == selectedIndex,
+              isSelected: entry.key == widget.selectedIndex,
               option: entry.value.option,
               onTap: () {
-                setState(() {
-                  selectedIndex = entry.key;
-                });
+                widget.updateSelectedOption(entry.key);
               },
             ),
           )

@@ -1,9 +1,13 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizzo/main.dart';
 
 import 'package:quizzo/models/question.dart';
 import 'package:quizzo/widgets/question_option.dart';
+
+import 'widgets/drawer_mobile.dart';
 
 class QuestionsPage extends StatefulWidget {
   const QuestionsPage({super.key});
@@ -14,70 +18,47 @@ class QuestionsPage extends StatefulWidget {
 
 class _QuestionsPageState extends State<QuestionsPage> {
   int index = 0;
+  List<Map> answer = List.filled(2, {});
+  int selectedOption = -1;
 
-  void updateIndex(context, number) {
+  void updateIndex(number) {
     setState(() {
       index = number;
     });
-    Scaffold.of(context).closeDrawer();
+  }
+
+  void updateAnswer(number, optionIndex) {
+    setState(() {
+      answer[index] = {'number': number, 'optionIndex': optionIndex};
+      selectedOption = -1;
+    });
+  }
+
+  void navigatoToResult(context) {
+    Provider.of<DataModel>(context, listen: false)
+        .updateResult(answer.length.toString());
+    Navigator.pushNamed(context, '/result');
+  }
+
+  void updateSelectedOption(optionIndex) {
+    setState(() {
+      selectedOption = optionIndex;
+    });
+  }
+
+  void onPressed() {
+    updateAnswer(1, selectedOption);
+    if (index == 1) {
+      navigatoToResult(context);
+    } else {
+      updateIndex(index + 1);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Consumer<DataModel>(builder: (context, data, child) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Hi ${data.name}',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Saat ini kamu sedang mengerjakan soal untuk kelas',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        Text('Kelas ${data.grade}'),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Builder(builder: (context) {
-                      return OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        child: Text(
-                          'close',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    }),
-                  )
-                ],
-              );
-            }),
-          ),
-        ),
-      ),
+      drawer: const DrawerMobile(),
       appBar: AppBar(
         // automaticallyImplyLeading: false,
         title: Text('Soal Nomor ${(index + 1).toString()}'),
@@ -97,28 +78,20 @@ class _QuestionsPageState extends State<QuestionsPage> {
                   const SizedBox(
                     height: 24,
                   ),
-                  QuestionOption(optionList: questionList[index].optionList),
+                  QuestionOption(
+                    optionList: questionList[index].optionList,
+                    selectedIndex: selectedOption,
+                    updateSelectedOption: updateSelectedOption,
+                  ),
                   const SizedBox(
                     height: 24,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FilledButton(
-                        onPressed: index == 0
-                            ? null
-                            : () {
-                                updateIndex(context, index - 1);
-                              },
-                        child: const Text('Sebelumnya'),
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          updateIndex(context, index + 1);
-                        },
-                        child: Text(index == 1 ? 'Selesai' : 'Selanjutnya'),
-                      ),
-                    ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: selectedOption != -1 ? onPressed : null,
+                      child: Text(index == 1 ? 'Selesai' : 'Selanjutnya'),
+                    ),
                   ),
                 ],
               ),

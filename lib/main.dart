@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:quizzo/result_page.dart';
 import 'package:quizzo/welcome_page.dart';
 
 void main() {
@@ -50,6 +51,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const MyHomePage(title: 'Home Page'),
         '/second': (context) => const MyHomePage(title: 'Second Page'),
+        '/result': (context) => const ResultPage(),
       },
     );
   }
@@ -58,12 +60,20 @@ class _MyAppState extends State<MyApp> {
 class DataModel with ChangeNotifier {
   String name = '';
   String grade = '';
+  String score = '';
 
   void updateName(newName) {
     name = newName;
+    notifyListeners();
   }
 
   void updateGrade(newGrade) {
     grade = newGrade;
+    notifyListeners();
+  }
+
+  void updateResult(newScore) {
+    score = newScore;
+    notifyListeners();
   }
 }
