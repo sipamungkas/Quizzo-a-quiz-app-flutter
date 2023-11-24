@@ -17,30 +17,31 @@ class QuestionsPage extends StatefulWidget {
 
 class _QuestionsPageState extends State<QuestionsPage> {
   int index = 0;
-  List<Map> answer = List.filled(questionList.length, {});
+  List<Answer> answer = List.generate(
+    questionList.length,
+    (index) => Answer(number: index, optionIndex: -1, isKey: false),
+  );
   int selectedOption = -1;
   bool isTrue = false;
 
-  void updateIndex(number) {
+  void updateIndex(number, selectedAnswer) {
     setState(() {
       index = number;
       isTrue = false;
+      selectedOption = selectedAnswer;
     });
   }
 
   void updateAnswer(number, optionIndex, isKey) {
     setState(() {
-      answer[index] = {
-        'number': number,
-        'optionIndex': optionIndex,
-        'isKey': isKey
-      };
+      answer[index] =
+          Answer(number: number, optionIndex: optionIndex, isKey: isKey);
     });
     log('answer: $answer');
   }
 
   void navigatoToResult(context) {
-    var correctAnswer = answer.where((element) => element['isKey'] == true);
+    var correctAnswer = answer.where((element) => element.isKey == true);
     final double result = correctAnswer.length / answer.length * 100;
     Provider.of<DataModel>(context, listen: false)
         .updateResult(result.toStringAsFixed(2));
@@ -60,15 +61,14 @@ class _QuestionsPageState extends State<QuestionsPage> {
     if (index == questionList.length - 1) {
       navigatoToResult(context);
     } else {
-      updateIndex(index + 1);
-      selectedOption = -1;
+      updateIndex(index + 1, -1);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerMobile(),
+      drawer: DrawerMobile(answer: answer, updateIndex: updateIndex),
       appBar: AppBar(
         // automaticallyImplyLeading: false,
         title: Text('Soal Nomor ${(index + 1).toString()}'),

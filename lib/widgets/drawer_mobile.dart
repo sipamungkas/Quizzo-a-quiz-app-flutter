@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizzo/main.dart';
+import 'package:quizzo/widgets/question_item.dart';
 
 class DrawerMobile extends StatelessWidget {
-  const DrawerMobile({
-    super.key,
-  });
+  final List<Answer> answer;
+  final Function updateIndex;
+  const DrawerMobile(
+      {Key? key, required this.answer, required this.updateIndex})
+      : super(key: key);
+
+  void updatePage(context, index, selectedAnswer) {
+    Navigator.pop(context);
+    updateIndex(index, selectedAnswer);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +42,54 @@ class DrawerMobile extends StatelessWidget {
                       const SizedBox(
                         height: 16,
                       ),
+                      Divider(
+                        height: 20,
+                        thickness: 1,
+                        endIndent: 0,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Daftar Soal',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Expanded(
+                        child: GridView.count(
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 8,
+                          childAspectRatio: 16 / 9,
+                          mainAxisSpacing: 8,
+                          children: <Widget>[
+                            ...answer
+                                .map((e) => InkWell(
+                                      onTap: () {
+                                        updatePage(
+                                            context, e.number, e.optionIndex);
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              color: e.optionIndex != -1
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Center(
+                                            child: Text(
+                                              (e.number + 1).toString(),
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          )),
+                                    ))
+                                .toList()
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -55,7 +111,7 @@ class DrawerMobile extends StatelessWidget {
                       },
                     );
                   }),
-                )
+                ),
               ],
             );
           }),
@@ -63,4 +119,12 @@ class DrawerMobile extends StatelessWidget {
       ),
     );
   }
+}
+
+class Answer {
+  final int number;
+  final int optionIndex;
+  final bool? isKey;
+
+  Answer({required this.number, required this.optionIndex, this.isKey = false});
 }
