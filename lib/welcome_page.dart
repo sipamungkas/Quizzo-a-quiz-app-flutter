@@ -54,14 +54,16 @@ class _MyHomePageState extends State<MyHomePage> {
       //   // the App.build method, and use it to set our appbar title.
       //   title: Text(widget.title),
       // ),
-      body: Builder(builder: (context) {
-        return Consumer<DataModel>(builder: (context, data, child) {
-          return SafeArea(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                // Center is a layout widget. It takes a single child and positions it
-                // in the middle of the parent.
+      body: Consumer<DataModel>(builder: (context, data, child) {
+        final mediaQuery = MediaQuery.of(context).size;
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              // Center is a layout widget. It takes a single child and positions it
+              // in the middle of the parent.
+              child: SizedBox(
+                width: mediaQuery.width > 728 ? 360 : double.infinity,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -120,8 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
       }),
       // This trailing comma makes auto-formatting nicer for build methods.
     );

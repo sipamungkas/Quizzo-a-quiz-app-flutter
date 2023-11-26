@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizzo/main.dart';
-import 'package:quizzo/widgets/question_item.dart';
+import 'package:quizzo/models/answer.dart';
 
 class DrawerMobile extends StatelessWidget {
   final List<Answer> answer;
@@ -119,12 +119,4 @@ class DrawerMobile extends StatelessWidget {
       ),
     );
   }
-}
-
-class Answer {
-  final int number;
-  final int optionIndex;
-  final bool? isKey;
-
-  Answer({required this.number, required this.optionIndex, this.isKey = false});
 }

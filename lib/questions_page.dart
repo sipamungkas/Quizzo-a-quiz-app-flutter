@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizzo/main.dart';
+import 'package:quizzo/models/answer.dart';
 
 import 'package:quizzo/models/question.dart';
+import 'package:quizzo/widgets/drawer_desktop.dart';
 import 'package:quizzo/widgets/question_option.dart';
 
 import 'widgets/drawer_mobile.dart';
@@ -67,59 +69,83 @@ class _QuestionsPageState extends State<QuestionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: DrawerMobile(answer: answer, updateIndex: updateIndex),
+      drawer: mediaQuery.width >= 768
+          ? null
+          : DrawerMobile(answer: answer, updateIndex: updateIndex),
       appBar: AppBar(
         // automaticallyImplyLeading: false,
         title: Text('Soal Nomor ${(index + 1).toString()}'),
         centerTitle: true,
         // leading: Button,
+        automaticallyImplyLeading: mediaQuery.width >= 768 ? false : true,
       ),
       body: Consumer<DataModel>(builder: (context, data, child) {
         return SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  if (questionList[index].image != '')
-                    Card(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.network(
-                          questionList[index].image!,
-                          // fit: BoxFit.cover,
+            child: Center(
+              child: Container(
+                width: mediaQuery.width >= 1400 ? 1400 : double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              if (questionList[index].image != '')
+                                Card(
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.network(
+                                      questionList[index].image!,
+                                      // fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Text(questionList[index].question),
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              QuestionOption(
+                                optionList: questionList[index].optionList,
+                                selectedIndex: selectedOption,
+                                updateSelectedOption: updateSelectedOption,
+                                count: mediaQuery.width >= 768 ? 4 : 1,
+                              ),
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: FilledButton(
+                                  onPressed:
+                                      selectedOption != -1 ? onPressed : null,
+                                  child: Text(index == questionList.length - 1
+                                      ? 'Selesai'
+                                      : 'Selanjutnya'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(questionList[index].question),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  QuestionOption(
-                    optionList: questionList[index].optionList,
-                    selectedIndex: selectedOption,
-                    updateSelectedOption: updateSelectedOption,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: selectedOption != -1 ? onPressed : null,
-                      child: Text(index == questionList.length - 1
-                          ? 'Selesai'
-                          : 'Selanjutnya'),
-                    ),
-                  ),
-                ],
+                        if (mediaQuery.width >= 768)
+                          Expanded(
+                            flex: 1,
+                            child: DrawerDesktop(
+                                answer: answer, updateIndex: updateIndex),
+                          )
+                      ]),
+                ),
               ),
             ),
           ),
