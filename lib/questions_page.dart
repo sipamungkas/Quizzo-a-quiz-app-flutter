@@ -85,7 +85,7 @@ class _QuestionsPageState extends State<QuestionsPage> {
         return SafeArea(
           child: SingleChildScrollView(
             child: Center(
-              child: Container(
+              child: SizedBox(
                 width: mediaQuery.width >= 1400 ? 1400 : double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(16),
