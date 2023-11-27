@@ -57,68 +57,70 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Consumer<DataModel>(builder: (context, data, child) {
         final mediaQuery = MediaQuery.of(context).size;
         return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              // Center is a layout widget. It takes a single child and positions it
-              // in the middle of the parent.
-              child: SizedBox(
-                width: mediaQuery.width > 728 ? 360 : double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Welcome to Quizzo!',
-                      style: Theme.of(context).textTheme.headlineLarge?.merge(
-                          TextStyle(color: Theme.of(context).primaryColor)),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Before we start our quiz, please input your name below!',
-                      style: Theme.of(context).textTheme.bodyMedium?.merge(
-                            const TextStyle(
-                              fontWeight: FontWeight.w600,
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                // Center is a layout widget. It takes a single child and positions it
+                // in the middle of the parent.
+                child: SizedBox(
+                  width: mediaQuery.width > 728 ? 360 : double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Welcome to Quizzo!',
+                        style: Theme.of(context).textTheme.headlineLarge?.merge(
+                            TextStyle(color: Theme.of(context).primaryColor)),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Before we start our quiz, please input your name below!',
+                        style: Theme.of(context).textTheme.bodyMedium?.merge(
+                              const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    TextField(
-                      onChanged: (text) {
-                        updateName(text);
-                      },
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Name',
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        onPressed: name == ''
-                            ? null
-                            : () {
-                                data.updateName(name);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ChooseClass()));
-                              },
-                        child: const Text('Next'),
+                      const SizedBox(
+                        height: 32,
                       ),
-                    )
-                  ],
+                      TextField(
+                        onChanged: (text) {
+                          updateName(text);
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Name',
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: name == ''
+                              ? null
+                              : () {
+                                  data.updateName(name);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ChooseClass()));
+                                },
+                          child: const Text('Next'),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
